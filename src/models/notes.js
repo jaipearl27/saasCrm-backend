@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const attendeeSchema = new mongoose.Schema(
+const noteSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -17,11 +17,6 @@ const attendeeSchema = new mongoose.Schema(
         required: [true, "phone is required"],
         trim: true,
     },
-    timeInSession: {
-        type: Number,
-        required: [true, "time in session required"],
-        default: 0
-    },
     leadType: {
       type: String,
       default: null
@@ -34,6 +29,6 @@ const attendeeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const attendeesModel = mongoose.model("attendee", attendeeSchema);
+const noteModel = mongoose.model("note", noteSchema);
 
-export default attendeesModel
+export default noteModel
