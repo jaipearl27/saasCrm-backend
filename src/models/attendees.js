@@ -7,9 +7,14 @@ const attendeeSchema = new mongoose.Schema(
       required: [true, "Email is required"],
       trim: true,
     },
-    name: {
+    firstName: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, "First Name is required"],
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: [true, "Last Name is required"],
       trim: true,
     },
     phone: {
@@ -25,6 +30,10 @@ const attendeeSchema = new mongoose.Schema(
     leadType: {
       type: String,
       default: null
+    },
+    date: {
+      type: String,
+      required: [true, 'Webinar Date is required']
     },
     csvId: {
         type: String,
