@@ -1,8 +1,9 @@
 import express from "express";
-import { addAttendees } from "../controller/attendees.js";
+import { addAttendees, getAllAttendees } from "../controller/attendees.js";
 
 const attendeesRouter = express.Router();
-attendeesRouter.route("/add").post(addAttendees);
+attendeesRouter.route("/").get(getAllAttendees).post(addAttendees);
+
 
 
 export default attendeesRouter;
