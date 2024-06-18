@@ -35,10 +35,14 @@ const attendeeSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Webinar Date is required']
     },
-    // csvId: {
-    //     type: String,
-    //     required: [true, "csv file id/name is required"]
-    // }
+    csvName: {
+      type: String,
+      required: [true, "csv name is required"]
+    },
+    csvId: {
+        type: String,
+        required: [true, "csv id is required"]
+    }
   },
   { timestamps: true }
 );
