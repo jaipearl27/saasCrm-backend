@@ -37,7 +37,7 @@ export const getAllAttendees = async (req, res) => {
   }
 };
 
-export const getCsvData = async () => {
+export const getCsvData = async (req, res) => {
   try {
     const pipeline = [
       // {
@@ -55,6 +55,6 @@ export const getCsvData = async () => {
 
     res.status(200).json({ status: true, data: csvDataRes });
   } catch (error) {
-    req.status(500).json({ status: false, message: error });
+    res.status(500).json({ status: false, message: error });
   }
 };
