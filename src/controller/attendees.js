@@ -2,13 +2,14 @@ import attendeesModel from "../models/attendees.js";
 
 export const addAttendees = async (req, res) => {
   try {
-    const csvName = "csv";
+
     const data = req.body;
+    const csvName = req?.body[0].csvName
+    const date = new Date();
+ const randomString= date.getTime()
 
     data.forEach((e) => {
-      const date = new Date();
-      e.csvName = csvName;
-      e.csvId = `${csvName}${date.getTime()}`;
+      e.csvId = `${csvName}${randomString}`;
     });
 
     const result = await attendeesModel.insertMany(data);
