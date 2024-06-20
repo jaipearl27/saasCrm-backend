@@ -4,11 +4,12 @@ export const addAttendees = async (req, res) => {
   try {
     const csvName = "csv";
     const data = req.body;
+    const date = new Date();
+    const currentData = date.getTime()
 
     data.forEach((e) => {
-      const date = new Date();
       e.csvName = csvName;
-      e.csvId = `${csvName}${date.getTime()}`;
+      e.csvId = `${csvName}${currentData}`;
     });
 
     const result = await attendeesModel.insertMany(data);
