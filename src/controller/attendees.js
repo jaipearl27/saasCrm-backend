@@ -2,14 +2,14 @@ import attendeesModel from "../models/attendees.js";
 
 export const addAttendees = async (req, res) => {
   try {
-    const csvName = "csv";
+
     const data = req.body;
+    const csvName = req?.body[0].csvName
     const date = new Date();
-    const currentData = date.getTime()
+ const randomString= date.getTime()
 
     data.forEach((e) => {
-      e.csvName = csvName;
-      e.csvId = `${csvName}${currentData}`;
+      e.csvId = `${csvName}${randomString}`;
     });
 
     const result = await attendeesModel.insertMany(data);
@@ -59,3 +59,16 @@ export const getCsvData = async (req, res) => {
     res.status(500).json({ status: false, message: error });
   }
 };
+
+
+export const deleteCsvData = async (req, res) => {
+  try {
+    const {csvId} = req.params
+    const deleteResult = await attendeesModel.deleteMany({csvId: csvId})
+    res.status(200).send(deleteResult)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error)
+
+  }
+}
