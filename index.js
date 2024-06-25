@@ -17,7 +17,7 @@ app.use(
           origin: [
             "http://localhost:5173",
             "http://localhost:5174",
-                     "https://saas-crm-pi.vercel.app/"
+                     "https://saas-crm-nine.vercel.app"
           ],
      
         }
@@ -25,8 +25,7 @@ app.use(
           origin: [
             "http://localhost:5173",
             "http://localhost:5174",
-                  "https://saas-crm-pi.vercel.app/"
-          ],
+"https://saas-crm-nine.vercel.app"         ],
           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
         
