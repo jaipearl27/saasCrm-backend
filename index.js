@@ -10,16 +10,8 @@ const PORT = process.env.PORT || 8000
 const app = express()
 
 app.use(express.json());
-app.use(cors(
-    process.env.NODE_ENV === "development" ? {
+app.use(cors({
         origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5010", "https://saas-crm-pi.vercel.app","https://saas-crm-pi.vercel.app/"],
-        methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-        exposedHeaders: ["*", "Authorization"],
-      }
-    : {
-        origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5010", "https://saas-crm-pi.vercel.app","https://saas-crm-pi.vercel.app/"],
-       
         methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
         exposedHeaders: ["*", "Authorization"],
