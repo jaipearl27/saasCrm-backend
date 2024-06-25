@@ -17,9 +17,13 @@ app.use(
           origin: [
             "http://localhost:5173",
             "http://localhost:5174",
-                     "https://saas-crm-nine.vercel.app"
-          ],
-     
+"https://saas-crm-nine.vercel.app"         ],
+          methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
+          allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+        credentials:false,
+        
+          maxAge: 600,
+          exposedHeaders: ["*", "Authorization"],
         }
       : {
           origin: [
@@ -28,6 +32,7 @@ app.use(
 "https://saas-crm-nine.vercel.app"         ],
           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+        credentials:false,
         
           maxAge: 600,
           exposedHeaders: ["*", "Authorization"],
