@@ -20,7 +20,7 @@ app.use(
 "https://saas-crm-nine.vercel.app"         ],
           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-        credentials:false,
+        credentials:true,
         
           maxAge: 600,
           exposedHeaders: ["*", "Authorization"],
@@ -32,7 +32,7 @@ app.use(
 "https://saas-crm-nine.vercel.app"         ],
           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-        credentials:false,
+        credentials:true,
         
           maxAge: 600,
           exposedHeaders: ["*", "Authorization"],
