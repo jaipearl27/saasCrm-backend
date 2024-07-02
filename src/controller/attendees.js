@@ -2,11 +2,10 @@ import attendeesModel from "../models/attendees.js";
 
 export const addAttendees = async (req, res) => {
   try {
-
     const data = req.body;
-    const csvName = req?.body[0].csvName
+    const csvName = req?.body[0].csvName;
     const date = new Date();
- const randomString= date.getTime()
+    const randomString = date.getTime();
 
     data.forEach((e) => {
       e.csvId = `${csvName}${randomString}`;
@@ -26,13 +25,11 @@ export const getAllAttendees = async (req, res) => {
   try {
     const result = await attendeesModel.find();
 
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: "Attendees data found successfully",
-        result,
-      });
+    res.status(200).json({
+      status: true,
+      message: "Attendees data found successfully",
+      result,
+    });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
   }
@@ -40,6 +37,8 @@ export const getAllAttendees = async (req, res) => {
 
 export const getCsvData = async (req, res) => {
   try {
+    const { page } = req.params;
+    const pageSize = 1;
     const pipeline = [
       // {
       //   $match: { userId: userId },
@@ -48,6 +47,21 @@ export const getCsvData = async (req, res) => {
         $group: {
           _id: "$csvId",
           attendees: { $push: "$$ROOT" },
+        },
+      },
+      {
+        $facet: {
+          metadata: [
+            { $count: "total" },
+            {
+              $addFields: {
+                page: page,
+                pageSize: pageSize,
+                totalPages: { $ceil: { $divide: ["$total", pageSize] } },
+              },
+            },
+          ],
+          data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
         },
       },
     ];
@@ -60,15 +74,13 @@ export const getCsvData = async (req, res) => {
   }
 };
 
-
 export const deleteCsvData = async (req, res) => {
   try {
-    const {csvId} = req.params
-    const deleteResult = await attendeesModel.deleteMany({csvId: csvId})
-    res.status(200).send(deleteResult)
+    const { csvId } = req.params;
+    const deleteResult = await attendeesModel.deleteMany({ csvId: csvId });
+    res.status(200).send(deleteResult);
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error)
-
+    console.error(error);
+    res.status(500).send(error);
   }
-}
+};

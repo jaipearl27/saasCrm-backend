@@ -3,7 +3,7 @@ import { addAttendees, deleteCsvData, getAllAttendees, getCsvData } from "../con
 
 const attendeesRouter = express.Router();
 attendeesRouter.route("/").get(getAllAttendees).post(addAttendees);
-attendeesRouter.route("/csvData").get(getCsvData)
+attendeesRouter.route("/csvData/:page").get(getCsvData)
 attendeesRouter.route("/:csvId").delete(deleteCsvData)
 
 
