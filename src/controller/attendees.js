@@ -21,13 +21,19 @@ export const addAttendees = async (req, res) => {
   }
 };
 
-export const getAllAttendees = async (req, res) => {
+export const getAttendees = async (req, res) => {
   try {
-    const result = await attendeesModel.find();
+    
+    const page = req?.params?.page || 1;
+    const limit = 25;
+    const skip = (page - 1) * limit;
+    
+    const result = await attendeesModel.find().skip(skip).limit(limit);
 
     res.status(200).json({
       status: true,
       message: "Attendees data found successfully",
+      page,
       result,
     });
   } catch (error) {
@@ -37,39 +43,31 @@ export const getAllAttendees = async (req, res) => {
 
 export const getCsvData = async (req, res) => {
   try {
-    const { page } = req.params;
-    const pageSize = 1;
+    const page = req?.params?.page || 1;
+    const limit = 8;
+    const skip = (page - 1) * limit;
     const pipeline = [
-      // {
-      //   $match: { userId: userId },
-      // },
       {
         $group: {
           _id: "$csvId",
-          attendees: { $push: "$$ROOT" },
+          csvName: { $first: "$csvName" },
+          date: { $first: "$date" },
+          // Include other fields as necessary
         },
       },
       {
-        $facet: {
-          metadata: [
-            { $count: "total" },
-            {
-              $addFields: {
-                page: page,
-                pageSize: pageSize,
-                totalPages: { $ceil: { $divide: ["$total", pageSize] } },
-              },
-            },
-          ],
-          data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
-        },
+        $skip: skip,
+      },
+      {
+        $limit: limit,
       },
     ];
 
-    const csvDataRes = await attendeesModel.aggregate(pipeline);
+    const result = await attendeesModel.aggregate(pipeline);
 
-    res.status(200).json({ status: true, data: csvDataRes });
+    res.status(200).json({ status: true, page, data: result });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ status: false, message: error });
   }
 };
