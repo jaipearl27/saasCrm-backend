@@ -26,7 +26,6 @@ export const getAttendees = async (req, res) => {
     let pipeline = {}
     if(req?.body?.csvId) pipeline = {csvId: req?.body?.csvId}
 
-    
     const page = req?.params?.page || 1;
     const limit = 25;
     const skip = (page - 1) * limit;
@@ -75,19 +74,26 @@ export const getCsvData = async (req, res) => {
 
     const pipeline = [
       {
+        $sort: { createdAt: -1 } // Sort by createdAt in descending order first
+      },
+      {
         $group: {
           _id: "$csvId",
           csvName: { $first: "$csvName" },
           date: { $first: "$date" },
+          createdAt: { $first: "$createdAt" }, // Include the createdAt field to maintain order
+          originalId: { $first: "$_id" }
           // Include other fields as necessary
         },
       },
+      {$sort: {createdAt: -1}},
       {
         $skip: skip,
       },
       {
         $limit: limit,
       },
+
     ];
 
     const result = await attendeesModel.aggregate(pipeline);
