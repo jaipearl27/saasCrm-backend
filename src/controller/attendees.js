@@ -2,11 +2,10 @@ import attendeesModel from "../models/attendees.js";
 
 export const addAttendees = async (req, res) => {
   try {
-
     const data = req.body;
-    const csvName = req?.body[0].csvName
+    const csvName = req?.body[0].csvName;
     const date = new Date();
- const randomString= date.getTime()
+    const randomString = date.getTime();
 
     data.forEach((e) => {
       e.csvId = `${csvName}${randomString}`;
@@ -22,17 +21,21 @@ export const addAttendees = async (req, res) => {
   }
 };
 
-export const getAllAttendees = async (req, res) => {
+export const getAttendees = async (req, res) => {
   try {
-    const result = await attendeesModel.find();
+    
+    const page = req?.params?.page || 1;
+    const limit = 25;
+    const skip = (page - 1) * limit;
+    
+    const result = await attendeesModel.find().skip(skip).limit(limit);
 
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: "Attendees data found successfully",
-        result,
-      });
+    res.status(200).json({
+      status: true,
+      message: "Attendees data found successfully",
+      page,
+      result,
+    });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
   }
@@ -40,35 +43,42 @@ export const getAllAttendees = async (req, res) => {
 
 export const getCsvData = async (req, res) => {
   try {
+    const page = req?.params?.page || 1;
+    const limit = 8;
+    const skip = (page - 1) * limit;
     const pipeline = [
-      // {
-      //   $match: { userId: userId },
-      // },
       {
         $group: {
           _id: "$csvId",
-          attendees: { $push: "$$ROOT" },
+          csvName: { $first: "$csvName" },
+          date: { $first: "$date" },
+          // Include other fields as necessary
         },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
       },
     ];
 
-    const csvDataRes = await attendeesModel.aggregate(pipeline);
+    const result = await attendeesModel.aggregate(pipeline);
 
-    res.status(200).json({ status: true, data: csvDataRes });
+    res.status(200).json({ status: true, page, data: result });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ status: false, message: error });
   }
 };
 
-
 export const deleteCsvData = async (req, res) => {
   try {
-    const {csvId} = req.params
-    const deleteResult = await attendeesModel.deleteMany({csvId: csvId})
-    res.status(200).send(deleteResult)
+    const { csvId } = req.params;
+    const deleteResult = await attendeesModel.deleteMany({ csvId: csvId });
+    res.status(200).send(deleteResult);
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error)
-
+    console.error(error);
+    res.status(500).send(error);
   }
-}
+};
