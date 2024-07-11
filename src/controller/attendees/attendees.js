@@ -1,5 +1,4 @@
-import attendeesModel from "../models/attendees.js";
-
+import attendeesModel from '../../models/attendees.js'
 export const addAttendees = async (req, res) => {
   try {
     const data = req.body;
@@ -55,7 +54,6 @@ export const getCsvData = async (req, res) => {
     const limit = 8;
     const skip = (page - 1) * limit;
 
-
     const countPipeline = [
       {
         $group: {
@@ -82,7 +80,8 @@ export const getCsvData = async (req, res) => {
           csvName: { $first: "$csvName" },
           date: { $first: "$date" },
           createdAt: { $first: "$createdAt" }, // Include the createdAt field to maintain order
-          originalId: { $first: "$_id" }
+          originalId: { $first: "$_id" },
+          count: {$sum: 1},
           // Include other fields as necessary
         },
       },
