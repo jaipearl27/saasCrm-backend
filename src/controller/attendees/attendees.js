@@ -1,4 +1,5 @@
 import attendeesModel from '../../models/attendees.js'
+
 export const addAttendees = async (req, res) => {
   try {
     const data = req.body;
