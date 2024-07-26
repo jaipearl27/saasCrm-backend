@@ -16,12 +16,20 @@ const userSchema = new mongoose.Schema({
     required: [true, "password is required"],
     trim: true,
   },
+  adminId: {
+    type: mongoose.Types.ObjectId,
+    ref: "users",
+  },
+  plan: {
+    type: mongoose.Types.ObjectId,
+    ref: "plan"
+  },
   role: {
     type: mongoose.Types.ObjectId,
     ref: "roles",
     required: [true, "role is required"],
   },
-  permissions: [{ type: mongoose.Types.ObjectId, ref: "permissions" }],
+  
 });
 
 
