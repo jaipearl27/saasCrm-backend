@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import express from "express";
 import { mongoConnect } from "./src/config/db.js";
 import attendeesRouter from "./src/routes/attendees.js";
+import rolesRouter from "./src/routes/roles.js";
+
 import cors from "cors";
 
 dotenv.config();
@@ -17,11 +19,12 @@ app.use(
           origin: [
             "http://localhost:5173",
             "http://localhost:5174",
-"https://saas-crm-nine.vercel.app"         ],
+            "https://saas-crm-nine.vercel.app",
+          ],
           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-        credentials:true,
-        
+          credentials: true,
+
           maxAge: 600,
           exposedHeaders: ["*", "Authorization"],
         }
@@ -29,19 +32,20 @@ app.use(
           origin: [
             "http://localhost:5173",
             "http://localhost:5174",
-"https://saas-crm-nine.vercel.app"         ],
+            "https://saas-crm-nine.vercel.app",
+          ],
           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-        credentials:true,
-        
+          credentials: true,
+
           maxAge: 600,
           exposedHeaders: ["*", "Authorization"],
         }
   )
 );
 
-app.use('/api/v1/attendee', attendeesRouter)
-
+app.use("/api/v1/attendee", attendeesRouter);
+app.use("/api/v1/roles", rolesRouter)
 
 app.listen(PORT, () => {
   console.log(`Server Listening on port ${PORT}`);

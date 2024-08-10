@@ -183,7 +183,7 @@ export const signup = asyncHandler(async (req, res) => {
 // @desc - signup for admin
 // @route - POST /auth/signup
 export const adminSignup = asyncHandler(async (req, res) => {
-  const { password, userName } = req?.body;
+  const {email, userName, password, role} = req?.body;
   const isUserExists = await usersModel.findOne({ userName });
   if (isUserExists)
     res.status(404).json({ status: false, message: "User already Exists" });
