@@ -30,7 +30,7 @@ const planSchema = new mongoose.Schema({
       required: [true, "Admin permissions are required"],
     },
   },
-  validity: {
+  planExpiry: {
     type: String,
     required: [true, 'plan validity is required']
   }

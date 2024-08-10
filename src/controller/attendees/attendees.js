@@ -92,9 +92,7 @@ export const getCsvData = asyncHandler(async (req, res) => {
 });
 
 export const deleteCsvData = asyncHandler(async (req, res) => {
- 
-    const { csvId } = req.params;
-    const deleteResult = await attendeesModel.deleteMany({ csvId: csvId });
-    res.status(200).send(deleteResult);
-
+  const { csvId } = req.params;
+  const deleteResult = await attendeesModel.deleteMany({ csvId: csvId });
+  res.status(200).send(deleteResult);
 });

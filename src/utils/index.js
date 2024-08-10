@@ -1,7 +1,6 @@
 // validities
 export const accessTokenValidity = "15m";
 export const refreshTokenValidity = "15d";
-// ----------------------------------------------------------------------------------------
 
 // httpOnlyCookieValidity - setting the validity for http only cookie
 const httpOnlyCookieValidity = () => {

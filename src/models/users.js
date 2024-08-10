@@ -19,11 +19,14 @@ const userSchema = new mongoose.Schema({
   adminId: {
     type: mongoose.Types.ObjectId,
     ref: "users",
+    default: 0
   },
+  // make api for this
   plan: {
     type: mongoose.Types.ObjectId,
     ref: "plan"
   },
+  // make api for this
   role: {
     type: mongoose.Types.ObjectId,
     ref: "roles",

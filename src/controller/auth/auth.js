@@ -4,7 +4,10 @@ import { usersModel } from "../../model/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { saveAccessTokenToCookie } from "../../utils/index.js";
-import { accessTokenValidity, refreshTokenValidity } from "../../utils/index.js";
+import {
+  accessTokenValidity,
+  refreshTokenValidity,
+} from "../../utils/index.js";
 
 // -------------------------------------------------------------------------------------------
 // @desc - to fetch the users data
@@ -19,7 +22,7 @@ export const login = asyncHandler(async (req, res) => {
       .json({ success: false, message: "All fields are required" });
   }
 
-  const user = await authModel.findOne({ userName });
+  const user = await usersModel.findOne({ userName });
 
   if (!user) {
     return res
@@ -71,7 +74,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
     });
   }
 
-  const user = await authModel.findOne({ userName });
+  const user = await usersModel.findOne({ userName });
 
   if (!user) {
     return res
@@ -114,7 +117,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
 //       });
 //     }
 
-//     const user = await authModel.findOne({ email });
+//     const user = await usersModel.findOne({ email });
 //     if (!user) {
 //       return res
 //         .status(400)
@@ -137,7 +140,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
 //     const hashedPassword = await bcrypt.hash(password, 10);
 
-//     await authModel.findOneAndUpdate(
+//     await usersModel.findOneAndUpdate(
 //       { email },
 //       { password: hashedPassword },
 //       { $new: true }
@@ -159,13 +162,34 @@ export const refreshToken = asyncHandler(async (req, res) => {
 export const signup = asyncHandler(async (req, res) => {
   const { password, userName } = req?.body;
 
-  const isUserExists = await authModel.findOne({ userName });
+  const isUserExists = await usersModel.findOne({ userName });
   if (isUserExists)
     res.status(404).json({ status: false, message: "User already Exists" });
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const savedUser = await authModel.create({
+  const savedUser = await usersModel.create({
+    userName: userName,
+    password: hashPassword,
+  });
+
+  res.status(200).json({
+    status: "SUCCESS",
+    message: "User created successfully",
+    data: savedUser,
+  });
+});
+
+// @desc - signup for admin
+// @route - POST /auth/signup
+export const adminSignup = asyncHandler(async (req, res) => {
+  const { password, userName } = req?.body;
+  const isUserExists = await usersModel.findOne({ userName });
+  if (isUserExists)
+    res.status(404).json({ status: false, message: "User already Exists" });
+
+  const hashPassword = await bcrypt.hash(password, 10);
+  const savedUser = await usersModel.create({
     userName: userName,
     password: hashPassword,
   });
