@@ -16,12 +16,23 @@ const userSchema = new mongoose.Schema({
     required: [true, "password is required"],
     trim: true,
   },
+  adminId: {
+    type: mongoose.Types.ObjectId,
+    ref: "users",
+    default: 0
+  },
+  // make api for this
+  plan: {
+    type: mongoose.Types.ObjectId,
+    ref: "plan"
+  },
+  // make api for this
   role: {
     type: mongoose.Types.ObjectId,
     ref: "roles",
     required: [true, "role is required"],
   },
-  permissions: [{ type: mongoose.Types.ObjectId, ref: "permissions" }],
+  
 });
 
 
