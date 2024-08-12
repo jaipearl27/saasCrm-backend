@@ -5,6 +5,7 @@ import attendeesRouter from "./src/routes/attendees.js";
 import rolesRouter from "./src/routes/roles.js";
 
 import cors from "cors";
+import authRouter from "./src/routes/auth.js";
 
 dotenv.config();
 
@@ -46,6 +47,8 @@ app.use(
 
 app.use("/api/v1/attendee", attendeesRouter);
 app.use("/api/v1/roles", rolesRouter)
+app.use("/api/v1/auth", authRouter)
+
 
 app.listen(PORT, () => {
   console.log(`Server Listening on port ${PORT}`);

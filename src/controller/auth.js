@@ -1,13 +1,14 @@
 // ----------------------------------------Imports-----------------------------------------------
 import { asyncHandler } from "../utils/errorHandler/asyncHandler.js";
-import { usersModel } from "../../model/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { saveAccessTokenToCookie } from "../../utils/index.js";
-import {
-  accessTokenValidity,
-  refreshTokenValidity,
-} from "../../utils/index.js";
+import { saveAccessTokenToCookie } from "../utils/index.js";
+import { accessTokenValidity, refreshTokenValidity } from "../utils/index.js";
+import dotenv from "dotenv";
+import usersModel from "../models/users.js";
+dotenv.config();
+
+const ROLES = JSON.parse(process.env.ROLES);
 
 // -------------------------------------------------------------------------------------------
 // @desc - to fetch the users data
@@ -183,15 +184,17 @@ export const signup = asyncHandler(async (req, res) => {
 // @desc - signup for admin
 // @route - POST /auth/signup
 export const adminSignup = asyncHandler(async (req, res) => {
-  const {email, userName, password, role} = req?.body;
+  const { email, userName, password } = req?.body;
   const isUserExists = await usersModel.findOne({ userName });
   if (isUserExists)
     res.status(404).json({ status: false, message: "User already Exists" });
 
   const hashPassword = await bcrypt.hash(password, 10);
   const savedUser = await usersModel.create({
+    email: email,
     userName: userName,
     password: hashPassword,
+    role: ROLES.SUPER_ADMIN,
   });
 
   res.status(200).json({
