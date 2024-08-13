@@ -1,5 +1,5 @@
-import { asyncHandler } from "../../utils/errorHandler/asyncHandler.js";
-import attendeesModel from "../../models/attendees.js";
+import { asyncHandler } from "../utils/errorHandler/asyncHandler.js";
+import attendeesModel from "../models/attendees.js";
 
 export const addAttendees = asyncHandler(async (req, res) => {
   const data = req.body;

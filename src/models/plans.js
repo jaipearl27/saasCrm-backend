@@ -14,20 +14,9 @@ const planSchema = new mongoose.Schema({
       type: [String],
       required: [true, "Admin permissions are required"],
     },
-    employee: {
-      type: [
-        {
-          role: {
-            type: mongoose.Types.ObjectId,
-            ref: "roles",
-          },
-          permission: {
-            type: [String],
-            required: [true, "permission for user required"],
-          },
-        },
-      ],
-      required: [true, "Admin permissions are required"],
+    employee:{
+      type: [String],
+      required: [true, "Employee permissions are required"],
     },
   },
   planExpiry: {

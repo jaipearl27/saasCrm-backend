@@ -1,5 +1,5 @@
 import express from "express";
-import { addAttendees, deleteCsvData, getAttendees, getCsvData } from "../controller/attendees/attendees.js";
+import { addAttendees, deleteCsvData, getAttendees, getCsvData } from "../controller/attendees.js";
 
 const attendeesRouter = express.Router();
 attendeesRouter.route("/").post(addAttendees);

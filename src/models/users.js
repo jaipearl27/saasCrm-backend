@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv'
+dotenv.config()
+
+const ROLES = JSON.parse(process.env.ROLES)
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -19,14 +23,13 @@ const userSchema = new mongoose.Schema({
   adminId: {
     type: mongoose.Types.ObjectId,
     ref: "users",
-    default: 0
+    default: ROLES.SUPER_ADMIN
   },
   // make api for this
   plan: {
     type: mongoose.Types.ObjectId,
     ref: "plan"
   },
-  // make api for this
   role: {
     type: mongoose.Types.ObjectId,
     ref: "roles",
@@ -36,6 +39,6 @@ const userSchema = new mongoose.Schema({
 });
 
 
-const usersModel = new mongoose.Model('user', userSchema)
+const usersModel = new mongoose.model('user', userSchema)
 
 export default usersModel

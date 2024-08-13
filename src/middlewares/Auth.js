@@ -1,8 +1,8 @@
 const availableRoles = {
-  SUPER_ADMIN: 0,
-  ADMIN: 1,
-  EMPLOYEE_SALES: 2,
-  EMPLOYEE_REMINDER: 3,
+  SUPER_ADMIN: "66b758464892ce3d994745c5",
+  ADMIN: "66b7584c4892ce3d994745c8",
+  EMPLOYEE_SALES: "66b758544892ce3d994745cb",
+  EMPLOYEE_REMINDER: "66b7585d4892ce3d994745ce",
 };
 
 // isSuperAdmin -- function to check whether the user is super admin or not
