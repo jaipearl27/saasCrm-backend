@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
-const ROLES = JSON.parse(process.env.ROLES)
+const ROLES = JSON.parse(process.env.ROLES);
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -23,22 +23,20 @@ const userSchema = new mongoose.Schema({
   adminId: {
     type: mongoose.Types.ObjectId,
     ref: "users",
-    default: ROLES.SUPER_ADMIN
+    default: ROLES.SUPER_ADMIN,
   },
   // make api for this
   plan: {
     type: mongoose.Types.ObjectId,
-    ref: "plan"
+    ref: "plan",
   },
   role: {
     type: mongoose.Types.ObjectId,
     ref: "roles",
     required: [true, "role is required"],
   },
-  
 });
 
+const usersModel = new mongoose.model("user", userSchema);
 
-const usersModel = new mongoose.model('user', userSchema)
-
-export default usersModel
+export default usersModel;
