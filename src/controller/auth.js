@@ -44,6 +44,8 @@ export const login = asyncHandler(async (req, res) => {
   const accessToken = jwt.sign(
     {
       id: user._id,
+      rId: user.role,
+      plan: user?.plan
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: accessTokenValidity }
@@ -181,28 +183,6 @@ export const signup = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc - signup for admin
-// @route - POST /auth/signup
-export const adminSignup = asyncHandler(async (req, res) => {
-  const { email, userName, password } = req?.body;
-  const isUserExists = await usersModel.findOne({ userName });
-  if (isUserExists)
-    res.status(404).json({ status: false, message: "User already Exists" });
-
-  const hashPassword = await bcrypt.hash(password, 10);
-  const savedUser = await usersModel.create({
-    email: email,
-    userName: userName,
-    password: hashPassword,
-    role: ROLES.SUPER_ADMIN,
-  });
-
-  res.status(200).json({
-    status: "SUCCESS",
-    message: "User created successfully",
-    data: savedUser,
-  });
-});
 
 // @desc - to fetch the users data
 // @route - POST /auth/logout
@@ -214,3 +194,28 @@ export const logout = asyncHandler(async (req, res) => {
     message: "Logged Out Successfully",
   });
 });
+
+
+// @desc - signup for admin
+// @route - POST /auth/signup
+// export const adminSignup = asyncHandler(async (req, res) => {
+//   const { email, userName, password } = req?.body;
+//   const isUserExists = await usersModel.findOne({ userName });
+//   if (isUserExists)
+//     res.status(404).json({ status: false, message: "User already Exists" });
+
+//   const hashPassword = await bcrypt.hash(password, 10);
+//   const savedUser = await usersModel.create({
+//     email: email,
+//     userName: userName,
+//     password: hashPassword,
+//     role: ROLES.SUPER_ADMIN,
+//   });
+
+//   res.status(200).json({
+//     status: "SUCCESS",
+//     message: "User created successfully",
+//     data: savedUser,
+//   });
+// });
+
