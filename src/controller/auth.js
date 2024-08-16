@@ -92,6 +92,8 @@ export const refreshToken = asyncHandler(async (req, res) => {
   const refreshToken = jwt.sign(
     {
       id: user._id,
+      rId: user.role,
+      plan: user?.plan
     },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: refreshTokenValidity }
