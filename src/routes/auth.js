@@ -1,8 +1,11 @@
 import express from 'express';
-import { adminSignup } from '../controller/auth.js';
+import { login, signup } from '../controller/auth.js';
 
 const authRouter = express.Router()
 
-authRouter.route('/admin/signup').post(adminSignup)
+authRouter.route('/signin').post(login)
+authRouter.route('/signup').post(signup)
+
+// authRouter.route('/admin/signup').post(adminSignup)
 
 export default authRouter
