@@ -7,6 +7,7 @@ import rolesRouter from "./src/routes/roles.js";
 import cors from "cors";
 import authRouter from "./src/routes/auth.js";
 import usersRouter from "./src/routes/users.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
+
 app.use(
   cors(
     process.env.NODE_ENV === "production"
