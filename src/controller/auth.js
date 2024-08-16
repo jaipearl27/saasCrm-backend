@@ -86,7 +86,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
   }
 
   // clearing the existing cookie
-  res.clearCookie("ACCESS_TOKEN");
+  res.clearCookie(process.env.ACCESS_TOKEN_NAME);
 
   // refreshToken - generating a new refresh token with extended time
   const refreshToken = jwt.sign(
@@ -190,7 +190,7 @@ export const signup = asyncHandler(async (req, res) => {
 // @route - POST /auth/logout
 // @access - PUBLIC
 export const logout = asyncHandler(async (req, res) => {
-  res.clearCookie("HEADKAYHEADDEGI_ACCESS_TOKEN");
+  res.clearCookie(process.env.ACCESS_TOKEN_NAME);
   res.status(200).json({
     success: true,
     message: "Logged Out Successfully",
