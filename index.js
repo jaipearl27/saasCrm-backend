@@ -16,20 +16,7 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 app.use(express.json());
-<<<<<<< HEAD
-app.use(cors(
-   {
-        origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5010", "https://saas-crm-pi.vercel.app"],
-        // credentials: true,
-        methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-        exposedHeaders: ["*", "Authorization"],
-    }
-))
-app.use('/api/v1/attendee', attendeesRouter)
-=======
 app.use(cookieParser());
->>>>>>> fd826d13cede79a2fc2c0872476a774266f1b972
 
 app.use(
   cors(
