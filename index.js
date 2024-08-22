@@ -8,6 +8,7 @@ import cors from "cors";
 import authRouter from "./src/routes/auth.js";
 import usersRouter from "./src/routes/users.js";
 import cookieParser from "cookie-parser";
+// import employeeRouter from "./src/routes/employee.js";
 
 dotenv.config();
 
@@ -54,7 +55,7 @@ app.use("/api/v1/attendee", attendeesRouter);
 app.use("/api/v1/roles", rolesRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/users", usersRouter)
-
+// app.use("/api/v1/employee", employeeRouter)
 
 app.listen(PORT, () => {
   console.log(`Server Listening on port ${PORT}`);

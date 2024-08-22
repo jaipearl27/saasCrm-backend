@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     required: [true, "userName is required"],
     trim: true,
   },
+  phone: {
+    type: String,
+    trim: true,
+  },
   password: {
     type: String,
     required: [true, "password is required"],
@@ -34,6 +38,7 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "roles",
     required: [true, "role is required"],
+    default: ROLES.ADMIN
   },
 });
 

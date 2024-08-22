@@ -45,7 +45,7 @@ export const login = asyncHandler(async (req, res) => {
     {
       id: user._id,
       rId: user.role,
-      plan: user?.plan
+      plan: user?.plan,
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: accessTokenValidity }
@@ -93,7 +93,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
     {
       id: user._id,
       rId: user.role,
-      plan: user?.plan
+      plan: user?.plan,
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: refreshTokenValidity }
@@ -165,17 +165,32 @@ export const refreshToken = asyncHandler(async (req, res) => {
 // @desc -signup for client panel
 // @route - POST /auth/signup
 export const signup = asyncHandler(async (req, res) => {
-  const { password, userName } = req?.body;
+  const { password, userName, phone, email, role, adminId } = req?.body;
 
-  const isUserExists = await usersModel.findOne({ userName });
-  if (isUserExists)
+
+  if(adminId){
+   role = ROLES[`${role}`]     
+  }
+
+  if(!password || !userName || !email) {
+    res.status(500).json({status: false, message: "Incomplete form inputs"})
+  }
+
+
+  const isUserExists = await usersModel.findOne({ email });
+  if (isUserExists) {
     res.status(404).json({ status: false, message: "User already Exists" });
+    return;
+  }
 
   const hashPassword = await bcrypt.hash(password, 10);
 
   const savedUser = await usersModel.create({
-    userName: userName,
+    userName,
+    email,
     password: hashPassword,
+    phone,
+    role,
   });
 
   res.status(200).json({
@@ -184,6 +199,52 @@ export const signup = asyncHandler(async (req, res) => {
     data: savedUser,
   });
 });
+
+
+// @desc - creation for employee by admin
+// @route - POST /employee/
+export const createEmployee = asyncHandler(async (req, res) => {
+  const { password, userName, phone, email, role } = req?.body;
+
+
+  if(!req?.adminId){
+    res.status(500).json({status: false, message: "Missing admin id"})
+    return
+  }
+
+  if(adminId){
+   role = ROLES[`${role}`]     
+  }
+
+  if(!password || !userName || !email) {
+    res.status(500).json({status: false, message: "Incomplete form inputs"})
+  }
+
+
+  const isUserExists = await usersModel.findOne({ email });
+  if (isUserExists) {
+    res.status(404).json({ status: false, message: "User already Exists" });
+    return;
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const savedUser = await usersModel.create({
+    userName,
+    email,
+    password: hashPassword,
+    phone,
+    role,
+  });
+
+  res.status(200).json({
+    status: "SUCCESS",
+    message: "User created successfully",
+    data: savedUser,
+  });
+});
+
+
 
 
 // @desc - to fetch the users data
@@ -196,7 +257,6 @@ export const logout = asyncHandler(async (req, res) => {
     message: "Logged Out Successfully",
   });
 });
-
 
 // @desc - signup for admin
 // @route - POST /auth/signup
@@ -220,4 +280,3 @@ export const logout = asyncHandler(async (req, res) => {
 //     data: savedUser,
 //   });
 // });
-
