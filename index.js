@@ -12,14 +12,14 @@ const app = express()
 app.use(express.json());
 app.use(cors(
     process.env.NODE_ENV === "development" ? {
-        origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5010"],
+        origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5175","https://saas-crm-nine.vercel.app"],
         credentials: true,
         methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
         exposedHeaders: ["*", "Authorization"],
       }
     : {
-        origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5010"],
+        origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5015","https://saas-crm-nine.vercel.app"],
         credentials: true,
         methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
