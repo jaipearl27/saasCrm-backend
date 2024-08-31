@@ -14,12 +14,12 @@ const attendeeSchema = new mongoose.Schema(
     },
     lastName: {
       type: String,
-      required: [true, "Last Name is required"],
+      // required: [true, "Last Name is required"],
       trim: true,
     },
     phone: {
         type: String,
-        required: [true, "phone is required"],
+        // required: [true, "phone is required"],
         trim: true,
     },
     timeInSession: {
@@ -32,7 +32,7 @@ const attendeeSchema = new mongoose.Schema(
       default: null
     },
     date: {
-      type: String,
+      type: String, 
       required: [true, 'Webinar Date is required']
     },
     csvName: {
