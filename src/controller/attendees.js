@@ -19,7 +19,8 @@ export const addAttendees = asyncHandler(async (req, res) => {
 });
 
 export const getAttendees = asyncHandler(async (req, res) => {
-  let pipeline = {};
+  console.log(req?.query)
+  let pipeline = req?.query;
   if (req?.body?.csvId) pipeline = { csvId: req?.body?.csvId };
 
   const page = req?.params?.page || 1;
