@@ -9,21 +9,16 @@ const planSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Plan Price is required"],
   },
-  permissions: {
-    admin: {
-      type: [String],
-      required: [true, "Admin permissions are required"],
-    },
-    employee:{
-      type: [String],
-      required: [true, "Employee permissions are required"],
-    },
-  },
   planExpiry: {
-    type: String,
+    type: Number,
     required: [true, 'plan validity is required']
-  }
-});
+  },
+  employeesCount: {
+    type: Number,
+    required: [true, 'Employee count is required'],
+    default: 1
+  },
+}, {timestamps: true});
 
 
 export const planModel = mongoose.model('plan', planSchema, 'plan')
