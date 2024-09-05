@@ -4,11 +4,8 @@ import jwt from "jsonwebtoken";
 
 export const verifyTokenMiddleware = async (req, res, next) => {
   try {
-
     const cookies = req?.cookies;
-    const access_token = cookies?.HEADKAYHEADDEGI_ACCESS_TOKEN;
-
-    // console.log('cookies',cookies)
+    const access_token = cookies[`${process.env.ACCESS_TOKEN_NAME}`];
 
     if (!access_token) {
       return res.status(403).json({
@@ -16,6 +13,7 @@ export const verifyTokenMiddleware = async (req, res, next) => {
         message: "Unauthorized! Please Check Your Login Credentials",
       });
     }
+
     jwt.verify(
       access_token,
       process.env.ACCESS_TOKEN_SECRET,
@@ -26,6 +24,8 @@ export const verifyTokenMiddleware = async (req, res, next) => {
             message: "Unauthorized token! Please Check Your Login Credentials",
           });
         }
+        req.role = user?.rId
+        req.plan = user?.plan
         next();
       }
     );

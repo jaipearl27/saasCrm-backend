@@ -58,7 +58,10 @@ export const login = asyncHandler(async (req, res) => {
     success: true,
     message: "Logged in Successfully",
     user: {
+      id: user._id,
       userName: user?.userName,
+      role: user?.role,
+      plan: user?.plan
     },
   });
 });
@@ -164,18 +167,17 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
 // @desc -signup for client panel
 // @route - POST /auth/signup
+
 export const signup = asyncHandler(async (req, res) => {
   const { password, userName, phone, email, role, adminId } = req?.body;
-
-
-  if(adminId){
-   role = ROLES[`${role}`]     
+  
+  if(adminId && req?.rId === ROLES.ADMIN){
+   role = ROLES[`${role}`]  
   }
 
   if(!password || !userName || !email) {
     res.status(500).json({status: false, message: "Incomplete form inputs"})
   }
-
 
   const isUserExists = await usersModel.findOne({ email });
   if (isUserExists) {
@@ -184,7 +186,7 @@ export const signup = asyncHandler(async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-
+  
   const savedUser = await usersModel.create({
     userName,
     email,
@@ -198,6 +200,7 @@ export const signup = asyncHandler(async (req, res) => {
     message: "User created successfully",
     data: savedUser,
   });
+
 });
 
 

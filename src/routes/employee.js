@@ -1,8 +1,5 @@
-// import express from 'express';
-// import { createEmployee } from '../controller/employee.js';
+import express from 'express';const employeeRouter = express.Router()
 
-// const employeeRouter = express.Router()
+employeeRouter.route('/').post(signin)
 
-// employeeRouter.route('/').post(createEmployee)
-
-// export default employeeRouter
+export default employeeRouter
