@@ -169,16 +169,12 @@ export const refreshToken = asyncHandler(async (req, res) => {
 // @route - POST /auth/signup
 
 export const signup = asyncHandler(async (req, res) => {
-  const { password, userName, phone, email, role, adminId } = req?.body;
-  
-  if(adminId && req?.rId === ROLES.ADMIN){
-   role = ROLES[`${role}`]  
-  }
+  const { password, userName, phone, email } = req?.body;
 
   if(!password || !userName || !email) {
     res.status(500).json({status: false, message: "Incomplete form inputs"})
   }
-
+ 
   const isUserExists = await usersModel.findOne({ email });
   if (isUserExists) {
     res.status(404).json({ status: false, message: "User already Exists" });
@@ -187,13 +183,13 @@ export const signup = asyncHandler(async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   
-  const savedUser = await usersModel.create({
+  let payload = {
     userName,
     email,
     password: hashPassword,
-    phone,
-    role,
-  });
+    phone
+  }
+  const savedUser = await usersModel.create(payload);
 
   res.status(200).json({
     status: "SUCCESS",
@@ -207,18 +203,22 @@ export const signup = asyncHandler(async (req, res) => {
 // @desc - creation for employee by admin
 // @route - POST /employee/
 export const createEmployee = asyncHandler(async (req, res) => {
-  const { password, userName, phone, email, role } = req?.body;
+  const { password, userName, phone, email,selectedRole, adminId, } = req?.body;
 
+  let role, plan;
 
-  if(!req?.adminId){
-    res.status(500).json({status: false, message: "Missing admin id"})
-    return
+  if(adminId && req?.rId === ROLES.ADMIN){
+   role = ROLES[`${selectedRole}`]  
+    
   }
 
-  if(adminId){
-   role = ROLES[`${role}`]     
+  if(req?.plan){
+    plan = await planModel.findById(req?.plan)
+    
   }
-
+  
+  console.log(plan)
+  return
   if(!password || !userName || !email) {
     res.status(500).json({status: false, message: "Incomplete form inputs"})
   }
@@ -237,7 +237,8 @@ export const createEmployee = asyncHandler(async (req, res) => {
     email,
     password: hashPassword,
     phone,
-    role,
+    selectedRole,
+
   });
 
   res.status(200).json({
