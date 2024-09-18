@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "roles",
     required: [true, "role is required"],
-    default: ROLES.ADMIN
+    // default: ROLES.ADMIN
   },
 });
 

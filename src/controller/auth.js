@@ -7,11 +7,11 @@ import { accessTokenValidity, refreshTokenValidity } from "../utils/index.js";
 import dotenv from "dotenv";
 import usersModel from "../models/users.js";
 import { planModel } from "../models/plans.js";
-import mongoose from "mongoose";
 
 dotenv.config();
 
 const ROLES = JSON.parse(process.env.ROLES);
+console.log(ROLES)
 
 // -------------------------------------------------------------------------------------------
 // @desc - to fetch the users data
@@ -211,11 +211,17 @@ export const createEmployee = asyncHandler(async (req, res) => {
   if (!password && !userName && !email && !adminId && !selectedRole) {
     res.status(500).json({ status: false, message: "Incomplete form inputs" });
   }
+  console.log(selectedRole)
+
 
   if (adminId && req?.role === ROLES.ADMIN) {
-    console.log("first")
+    console.log(selectedRole)
     role = ROLES[`${selectedRole}`];
+  } else {
+    res.status(500).json({status: false, message: "Only Admin level roles are allowed to create employees."})
   }
+
+  console.log(role)
 
   if (req?.plan) {
     plan = await planModel.findById(req?.plan);
