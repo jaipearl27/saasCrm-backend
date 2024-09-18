@@ -212,8 +212,8 @@ export const createEmployee = asyncHandler(async (req, res) => {
     res.status(500).json({ status: false, message: "Incomplete form inputs" });
   }
 
-
-  if (adminId && req?.rId === ROLES.ADMIN) {
+  if (adminId && req?.role === ROLES.ADMIN) {
+    console.log("first")
     role = ROLES[`${selectedRole}`];
   }
 
@@ -238,6 +238,8 @@ export const createEmployee = asyncHandler(async (req, res) => {
   // return;
   if (employeeCount < plan.employeesCount) {
     const hashPassword = await bcrypt.hash(password, 10);
+
+    console.log(role,"role")
 
     const savedUser = await usersModel.create({
       userName,
