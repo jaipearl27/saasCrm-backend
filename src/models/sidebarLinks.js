@@ -14,3 +14,5 @@ const sidebarLinksSchema = mongoose.Schema({
         maxLength: 2048,
     }
 }, {timestamps: true})
+
+export const sidebarLinksModel = mongoose.model("sidebarLinks", sidebarLinksSchema, "sidebarLinks")
