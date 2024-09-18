@@ -4,10 +4,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { saveAccessTokenToCookie } from "../utils/index.js";
 import { accessTokenValidity, refreshTokenValidity } from "../utils/index.js";
-import dotenv from "dotenv";
 import usersModel from "../models/users.js";
 import { planModel } from "../models/plans.js";
 
+import dotenv from "dotenv";
 dotenv.config();
 
 const ROLES = JSON.parse(process.env.ROLES);
