@@ -11,7 +11,7 @@ import { planModel } from "../models/plans.js";
 dotenv.config();
 
 const ROLES = JSON.parse(process.env.ROLES);
-console.log(ROLES)
+// console.log(ROLES)
 
 // -------------------------------------------------------------------------------------------
 // @desc - to fetch the users data
@@ -211,11 +211,11 @@ export const createEmployee = asyncHandler(async (req, res) => {
   if (!password && !userName && !email && !adminId && !selectedRole) {
     res.status(500).json({ status: false, message: "Incomplete form inputs" });
   }
-  console.log(selectedRole)
+  // console.log(selectedRole)
 
 
   if (adminId && req?.role === ROLES.ADMIN) {
-    console.log(selectedRole)
+    // console.log(selectedRole)
     role = ROLES[`${selectedRole}`];
   } else {
     res.status(500).json({status: false, message: "Only Admin level roles are allowed to create employees."})
