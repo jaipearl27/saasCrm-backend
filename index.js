@@ -9,6 +9,7 @@ import authRouter from "./src/routes/auth.js";
 import usersRouter from "./src/routes/users.js";
 import cookieParser from "cookie-parser";
 import planRouter from "./src/routes/plans.js";
+import productRouter from "./src/routes/product.js";
 // import employeeRouter from "./src/routes/employee.js";
 
 dotenv.config();
@@ -52,6 +53,7 @@ app.use(
 
 // routes
 app.use("/api/v1/attendee", attendeesRouter);
+app.use("/api/v1/product", productRouter);
 app.use("/api/v1/roles", rolesRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/users", usersRouter)
