@@ -244,7 +244,7 @@ export const createEmployee = asyncHandler(async (req, res) => {
       email,
       password: hashPassword,
       phone,
-      selectedRole,
+      role,
       adminId,
     });
 

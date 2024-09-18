@@ -10,7 +10,7 @@ import usersRouter from "./src/routes/users.js";
 import cookieParser from "cookie-parser";
 import planRouter from "./src/routes/plans.js";
 import productRouter from "./src/routes/product.js";
-// import employeeRouter from "./src/routes/employee.js";
+import employeeRouter from "./src/routes/employee.js";
 
 dotenv.config();
 
@@ -58,7 +58,7 @@ app.use("/api/v1/roles", rolesRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/users", usersRouter)
 app.use("/api/v1/plans", planRouter)
-// app.use("/api/v1/employee", employeeRouter)
+app.use("/api/v1/employee", employeeRouter)
 
 app.listen(PORT, () => {
   console.log(`Server Listening on port ${PORT}`);
