@@ -6,6 +6,9 @@ import { saveAccessTokenToCookie } from "../utils/index.js";
 import { accessTokenValidity, refreshTokenValidity } from "../utils/index.js";
 import dotenv from "dotenv";
 import usersModel from "../models/users.js";
+import { planModel } from "../models/plans.js";
+import mongoose from "mongoose";
+
 dotenv.config();
 
 const ROLES = JSON.parse(process.env.ROLES);
@@ -61,7 +64,7 @@ export const login = asyncHandler(async (req, res) => {
       id: user._id,
       userName: user?.userName,
       role: user?.role,
-      plan: user?.plan
+      plan: user?.plan,
     },
   });
 });
@@ -171,10 +174,10 @@ export const refreshToken = asyncHandler(async (req, res) => {
 export const signup = asyncHandler(async (req, res) => {
   const { password, userName, phone, email } = req?.body;
 
-  if(!password || !userName || !email) {
-    res.status(500).json({status: false, message: "Incomplete form inputs"})
+  if (!password || !userName || !email) {
+    res.status(500).json({ status: false, message: "Incomplete form inputs" });
   }
- 
+
   const isUserExists = await usersModel.findOne({ email });
   if (isUserExists) {
     res.status(404).json({ status: false, message: "User already Exists" });
@@ -182,13 +185,13 @@ export const signup = asyncHandler(async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  
+
   let payload = {
     userName,
     email,
     password: hashPassword,
-    phone
-  }
+    phone,
+  };
   const savedUser = await usersModel.create(payload);
 
   res.status(200).json({
@@ -196,31 +199,28 @@ export const signup = asyncHandler(async (req, res) => {
     message: "User created successfully",
     data: savedUser,
   });
-
 });
-
 
 // @desc - creation for employee by admin
 // @route - POST /employee/
 export const createEmployee = asyncHandler(async (req, res) => {
-  const { password, userName, phone, email,selectedRole, adminId, } = req?.body;
-
+  const { password, userName, phone, email, selectedRole, adminId } = req?.body;
   let role, plan;
 
-  if(adminId && req?.rId === ROLES.ADMIN){
-   role = ROLES[`${selectedRole}`]  
-    
+
+  if (!password && !userName && !email && !adminId && !selectedRole) {
+    res.status(500).json({ status: false, message: "Incomplete form inputs" });
   }
 
-  if(req?.plan){
-    plan = await planModel.findById(req?.plan)
-    
+
+  if (adminId && req?.rId === ROLES.ADMIN) {
+    role = ROLES[`${selectedRole}`];
   }
-  
-  console.log(plan)
-  return
-  if(!password || !userName || !email) {
-    res.status(500).json({status: false, message: "Incomplete form inputs"})
+
+  if (req?.plan) {
+    plan = await planModel.findById(req?.plan);
+  } else {
+    res.status(500).json({ status: false, message: "No Plan Found" });
   }
 
 
@@ -230,26 +230,36 @@ export const createEmployee = asyncHandler(async (req, res) => {
     return;
   }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  // const AdminId = new mongoose.Schema.Types.ObjectId(adminId)
 
-  const savedUser = await usersModel.create({
-    userName,
-    email,
-    password: hashPassword,
-    phone,
-    selectedRole,
+  const employeeCount = await usersModel.countDocuments({ adminId: adminId });
 
-  });
+  console.log(employeeCount, plan.employeesCount);
+  // return;
+  if (employeeCount < plan.employeesCount) {
+    const hashPassword = await bcrypt.hash(password, 10);
 
-  res.status(200).json({
-    status: "SUCCESS",
-    message: "User created successfully",
-    data: savedUser,
-  });
+    const savedUser = await usersModel.create({
+      userName,
+      email,
+      password: hashPassword,
+      phone,
+      selectedRole,
+      adminId,
+    });
+
+    res.status(200).json({
+      status: "SUCCESS",
+      message: "User created successfully",
+      data: savedUser,
+    });
+  } else {
+    res.status(500).json({
+      status: false,
+      message: "Employee limit reached for this plan.",
+    });
+  }
 });
-
-
-
 
 // @desc - to fetch the users data
 // @route - POST /auth/logout

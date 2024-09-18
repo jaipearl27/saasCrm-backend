@@ -26,6 +26,7 @@ export const verifyTokenMiddleware = async (req, res, next) => {
         }
         req.role = user?.rId
         req.plan = user?.plan
+        
         next();
       }
     );
