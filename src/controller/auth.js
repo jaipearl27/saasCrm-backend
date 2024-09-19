@@ -245,6 +245,8 @@ export const createEmployee = asyncHandler(async (req, res) => {
   if (employeeCount < plan.employeesCount) {
     const hashPassword = await bcrypt.hash(password, 10);
 
+    console.log(role,"role")
+
     const savedUser = await usersModel.create({
       userName,
       email,
