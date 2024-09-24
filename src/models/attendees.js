@@ -42,10 +42,19 @@ const attendeeSchema = new mongoose.Schema(
     csvId: {
         type: String,
         required: [true, "csv id is required"]
-    }
+    },
+    recordType: {
+      type: String,
+      enums: ['sales', 'reminder'],
+      default: 'sales',
+      required: [true, "csv id is required"]
+  }
   },
   { timestamps: true }
 );
+
+attendeeSchema.index({csvId: 1, recordType: 1})
+
 
 const attendeesModel = mongoose.model("attendee", attendeeSchema);
 

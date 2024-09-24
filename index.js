@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
-import { mongoConnect } from "./src/config/db.js";
+import { mongoConnect, syncIndexes } from "./src/config/db.js";
 import attendeesRouter from "./src/routes/attendees.js";
 import rolesRouter from "./src/routes/roles.js";
 
@@ -12,6 +12,7 @@ import planRouter from "./src/routes/plans.js";
 import productRouter from "./src/routes/product.js";
 import employeeRouter from "./src/routes/employee.js";
 import globalDataRouter from "./src/routes/globalData.js";
+
 
 dotenv.config();
 
@@ -65,5 +66,6 @@ app.use("/api/v1/globalData", globalDataRouter)
 
 app.listen(PORT, () => {
   console.log(`Server Listening on port ${PORT}`);
+  syncIndexes()
   mongoConnect();
 });
