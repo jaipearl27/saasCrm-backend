@@ -111,7 +111,7 @@ export const assignAttendee = asyncHandler(async (req, res) => {
   if (!email && !userId & !attendeeId) {
     res
       .status(500)
-      .json({ status: false, message: "missing email/userId/attendeeId" });
+      .json({ status: false, message: "Missing Email/userId/attendeeId" });
   }
 
   //checking if attendee exists in DB
@@ -169,8 +169,8 @@ export const assignAttendee = asyncHandler(async (req, res) => {
     res.status(500).json({
       message: "Role not allowed to get this attendee assigned.",
       role: user?.role,
-      sales: ROLES?.EMPLOYEE_SALES,
-      reminder: ROLES?.EMPLOYEE_REMINDER,
+      salesId: ROLES?.EMPLOYEE_SALES,
+      reminderId: ROLES?.EMPLOYEE_REMINDER,
       attendeeRole: attendee?.recordType,
     });
   }
