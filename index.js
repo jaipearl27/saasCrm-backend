@@ -64,6 +64,10 @@ app.use("/api/v1/employee", employeeRouter)
 app.use("/api/v1/globalData", globalDataRouter)
 
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 app.listen(PORT, () => {
   console.log(`Server Listening on port ${PORT}`);
   syncIndexes()

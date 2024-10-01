@@ -15,3 +15,4 @@ export const getAllClients = asyncHandler(async (req, res) => {
     const result = await usersModel.find({role: ROLES.ADMIN})
     res.status(200).send(result)
 })
+

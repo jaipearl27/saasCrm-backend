@@ -32,7 +32,7 @@ export const syncIndexes = async () => {
     await AttendeeModel.syncIndexes();
     console.log("Indexes have been synced successfully");
 
-    process.exit(0);  // Exit after syncing
+    // process.exit(0);  // Exit after syncing
   } catch (error) {
     console.error("Error syncing indexes:", error);
     process.exit(1);  // Exit with failure code

@@ -13,3 +13,5 @@ export const getEmployees = asyncHandler(async (req, res) => {
     res.status(200).json({status: true, data: result})
     
 })
+
+

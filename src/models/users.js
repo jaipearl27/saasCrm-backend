@@ -40,6 +40,17 @@ const userSchema = new mongoose.Schema({
     required: [true, "role is required"],
     // default: ROLES.ADMIN
   },
+  assignments : [
+    {
+      email: {
+        type: String,
+        unique: true
+      },
+      recordType: {
+        type: String,
+      }
+    }
+  ]
 });
 
 const usersModel = new mongoose.model("user", userSchema);
