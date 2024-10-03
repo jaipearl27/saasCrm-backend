@@ -105,73 +105,111 @@ export const deleteCsvData = asyncHandler(async (req, res) => {
   res.status(200).send(deleteResult);
 });
 
-export const assignAttendee = asyncHandler(async (req, res) => {
-  const { email, userId, attendeeId } = req?.body;
+export const assignAttendees = asyncHandler(async (req, res) => {
+  const { userId, attendees } = req?.body; // Assuming attendees is an array of attendee objects with attendeeId and recordType
 
-  if (!email && !userId & !attendeeId) {
-    res
-      .status(500)
-      .json({ status: false, message: "Missing Email/userId/attendeeId" });
+  if (req?.role !== ROLES.ADMIN) {
+    res.status(500).json({
+      status: false,
+      message: "Only admin is allowed to assign attendees",
+    });
   }
 
-  //checking if attendee exists in DB
-  const attendee = await attendeesModel.findOne({ _id: attendeeId });
-  if (!attendee) {
-    return res.status(404).json({ message: "Attendee not found" });
+  const adminId = req?.id;
+
+  const isMyAdmin = await usersModel.findOne({ _id: userId, adminId: adminId });
+
+  if (!isMyAdmin) {
+    return res.status(500).json({
+      status: false,
+      message: "Only employee's admin is allowed to assign attendees",
+    });
   }
 
-  const isAssigned = await usersModel.findOne({
-    "assignments.email": email,
-    "assignments.recordType": attendee?.recordType,
-  });
-
-  if (isAssigned) {
+  if (!userId && !attendees && attendees && attendees?.length === 0) {
     return res
-      .status(400)
-      .json({ message: "Attendee is already assigned to a user" });
+      .status(500)
+      .json({ status: false, message: "Missing userId/attendees" });
   }
 
   //getting user to be assigned's data as per userId
-  const user = await usersModel.findOne({
-    _id: userId,
-  });
+  const user = await usersModel.findOne({ _id: userId });
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
 
-  let roleAllowed = false;
+  const assignedAttendees = { userId, assignments: [] };
+  const failedAssignments = [];
 
-  //conditions for assigning attendee as per user role, i.e reminder / sales employee
-  switch (attendee?.recordType) {
-    case "sales":
-      roleAllowed = String(user?.role) === String(ROLES?.EMPLOYEE_SALES);
-      break;
-    case "reminder":
-      roleAllowed = String(user?.role) === String(ROLES?.EMPLOYEE_REMINDER);
-      break;
-    default:
-      roleAllowed = false;
-      break;
-  }
+  for (const attendeeData of attendees) {
+    const { attendeeId } = attendeeData;
 
-  //executing assingment if role is allowed
-  if (roleAllowed) {
-    const result = await usersModel.findByIdAndUpdate(
-      userId,
-      { $push: { assignments: { email, recordType: attendee?.recordType } } },
-      { new: true }
-    );
-    res
-      .status(200)
-      .json({ message: "Attendee assigned successfully", data: result });
-  } else {
-    res.status(500).json({
-      message: "Role not allowed to get this attendee assigned.",
-      role: user?.role,
-      salesId: ROLES?.EMPLOYEE_SALES,
-      reminderId: ROLES?.EMPLOYEE_REMINDER,
-      attendeeRole: attendee?.recordType,
+    // Checking if attendee exists in DB
+    const attendee = await attendeesModel.findOne({ _id: attendeeId });
+    if (!attendee) {
+      failedAssignments.push({
+        attendeeId,
+        reason: "Attendee not found",
+      });
+      continue;
+    }
+
+    // Checking if attendee is already assigned to another user
+    const isAssigned = await usersModel.findOne({
+      "assignments.email": attendee?.email,
+      "assignments.recordType": attendee?.recordType,
     });
+
+    if (isAssigned) {
+      failedAssignments.push({
+        attendeeId,
+        reason: "Attendee is already assigned to a user",
+      });
+      continue;
+    }
+
+    // Checking if user's role allows assigning this type of attendee
+    let roleAllowed = false;
+    switch (attendee?.recordType) {
+      case "sales":
+        roleAllowed = String(user?.role) === String(ROLES?.EMPLOYEE_SALES);
+        break;
+      case "reminder":
+        roleAllowed = String(user?.role) === String(ROLES?.EMPLOYEE_REMINDER);
+        break;
+      default:
+        roleAllowed = false;
+        break;
+    }
+
+    if (roleAllowed) {
+      // Assign the attendee to the user
+      const result = await usersModel.findByIdAndUpdate(
+        userId,
+        {
+          $push: {
+            assignments: {
+              email: attendee?.email,
+              recordType: attendee?.recordType,
+            },
+          },
+        },
+        { new: true }
+      );
+      assignedAttendees.assignments = result?.assignments;
+    } else {
+      failedAssignments.push({
+        attendeeId,
+        reason: "Role not allowed to get this attendee assigned",
+      });
+    }
   }
+
+  // Respond with the results of assignment
+  res.status(200).json({
+    message: "Batch assignment process completed",
+    assignedAttendees,
+    failedAssignments,
+  });
 });

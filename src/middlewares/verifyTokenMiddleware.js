@@ -30,6 +30,7 @@ export const verifyTokenMiddleware = async (req, res, next) => {
           });
         }
 
+        req.id = user?.id
         req.role = user?.rId;
         req.plan = user?.plan;
 
