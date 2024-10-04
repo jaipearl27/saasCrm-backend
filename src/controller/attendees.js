@@ -183,6 +183,8 @@ export const assignAttendees = asyncHandler(async (req, res) => {
         break;
     }
 
+
+
     if (roleAllowed) {
       // Assign the attendee to the user
       const result = await usersModel.findByIdAndUpdate(
@@ -208,7 +210,7 @@ export const assignAttendees = asyncHandler(async (req, res) => {
 
   // Respond with the results of assignment
   res.status(200).json({
-    message: "Batch assignment process completed",
+    message: `Assignments: ${assignedAttendees.assignments.length} Successful, ${failedAssignments.length} Failed.`,
     assignedAttendees,
     failedAssignments,
   });
